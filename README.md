@@ -6,6 +6,7 @@ CSYE- 6225
 - run npm i 
 - run node index.js
 
+<!-- THIS IS A README FILE -->
 
 npm i nodemon - (nodemon --exec npm start)
 nodemon start
