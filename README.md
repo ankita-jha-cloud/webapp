@@ -8,7 +8,8 @@ CSYE- 6225
 
 
 npm i nodemon - (nodemon --exec npm start)
+nodemon start
 npm i chai
 npm i mocha
 npm i mysql
-npm test --
+npm test
