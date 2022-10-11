@@ -6,7 +6,7 @@ CSYE- 6225
 - run npm i 
 - run node index.js
 
-
+tesar
 npm i nodemon - (nodemon --exec npm start)
 nodemon start
 npm i chai
