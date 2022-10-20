@@ -26,8 +26,7 @@ app.get('/healthz',(req,res)=>{
 const PORT = process.env.PORT || 8080
 
 //server
-
-app.listen(PORT, () => {
+var server=app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`)
 })
 
