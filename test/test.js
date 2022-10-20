@@ -6,7 +6,7 @@ var expect = chai.expect;
 
 describe('Account', () => {
   it("test1", () => {
-    chai.request('http://localhost:8000')
+    chai.request('http://localhost:3000')
     .get('/healthz')
     .end(function(err,res){
       expect(err).to.be.null
