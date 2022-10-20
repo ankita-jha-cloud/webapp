@@ -4,8 +4,9 @@
   "description": "node express crud api with sequelize",
   "main": "server.js",
   "scripts": {
-    "test": "mocha",
-    "start": "node server.js"
+    
+    "start": "node server.js",
+    "test": "jest --runInBand --force-exit"
   },
   "keywords": [
     "node",
@@ -21,6 +22,7 @@
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jest": "^29.2.1",
     "mocha": "^10.1.0",
     "moment": "^2.29.4",
     "multer": "^1.4.3",
