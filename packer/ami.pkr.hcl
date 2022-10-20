@@ -44,7 +44,7 @@ source "amazon-ebs" "webapp" {
   launch_block_device_mappings {
     delete_on_termination = true
     device_name           = "/dev/sda1"
-    volume_size           = 8
+    volume_size           = 50
     volume_type           = "gp2"
   }
 }
