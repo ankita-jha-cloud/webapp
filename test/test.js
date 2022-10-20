@@ -2,11 +2,11 @@ var chai = require('chai');
 chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 var expect = chai.expect;
-
+let app=require('../server')
 
 describe('Account', () => {
   it("test1", () => {
-    chai.request('http://localhost:3000')
+    chai.request(app)
     .get('/healthz')
     .end(function(err,res){
       expect(err).to.be.null
