@@ -13,7 +13,7 @@
     "express",
     "mysql"
   ],
-  "author": "harsh",
+  "author": "ankita",
   "license": "ISC",
   "dependencies": {
     "basic-auth": "^2.0.1",

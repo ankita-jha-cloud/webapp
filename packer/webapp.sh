@@ -12,8 +12,8 @@ curl --silent --location https://deb.nodesource.com/setup_16.x  | sudo bash -
 
 
 echo "Installing mysql server"
-
-sudo apt-get install mysql-server -y
+# I have to remove that sqlll!!
+# sudo apt-get install mysql-server -y
 
 sudo mysql <<EOF
 
