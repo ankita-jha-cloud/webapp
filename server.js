@@ -1,33 +1,28 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+const app = express();
+const db = require("./models");
+const router = require('./routes/productRouter.js');
+require('dotenv').config();
 
+// Syncing the DB using Sequelize
+db.sequelize.sync()
+.then((
+    console.log("DB sync done!")
+));
 
-const app = express()
-
-// middleware
-
-app.use(express.json())
-
-app.use(express.urlencoded({ extended: true }))
-
-
-// routers
-const router = require('./routes/productRouter.js')
-app.use('/v1/account', router)
-
-
-app.get('/healthz',(req,res)=>{
-    res.status(200).send()
-});
-
-
-//port
-
-const PORT = process.env.PORT || 8080
-
-//server
-var server=app.listen(PORT, () => {
-    console.log(`server is running on port ${PORT}`)
+// Health Check endpoint - returns 200 HTTP status code
+app.get('/healthz', (req,res) => {
+    res.status(200).send();
 })
 
-module.exports=app;
+//Middlewear
+app.use(express.json());
+app.use(express.urlencoded({extended: true}))
+
+// Router
+app.use('/v1', router);
+
+const PORT = 8080;
+app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
+
+module.exports = app;

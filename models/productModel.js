@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Product = sequelize.define("accounts", {
+    const Product = sequelize.define("user", {
         id: {
             type: DataTypes.STRING,
             primaryKey: true

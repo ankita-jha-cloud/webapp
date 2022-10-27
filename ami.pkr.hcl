@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    amazon = {
+      version = ">= 1.0.0"
+      source  = "github.com/hashicorp/amazon"
+    }
+  }
+}
+
 variable "aws_region" {
   type    = string
   default = "us-east-1"
@@ -15,14 +24,18 @@ variable "ssh_username" {
 
 variable "subnet_id" {
   type    = string
+  //default = "subnet-0d2d0f9b3806165e7"
   default = "subnet-05bbf78a541cf3d5c"
 }
 
 # https://www.packer.io/plugins/builders/amazon/ebs
-source "amazon-ebs" "webapp" {
+source "amazon-ebs" "my-ami" {
   region     = "${var.aws_region}"
   ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = "AMI for CSYE 6225"
+  ami_users = [
+    "591866328852",
+  ]
   ami_regions = [
     "us-east-1",
   ]
@@ -47,25 +60,25 @@ source "amazon-ebs" "webapp" {
 }
 
 build {
-  sources = ["source.amazon-ebs.webapp"]
+  sources = ["source.amazon-ebs.my-ami"]
 
-//   provisioner "shell" {
-//     // environment_vars = [
-//     //   "DEBIAN_FRONTEND=noninteractive",
-//     //   "CHECKPOINT_DISABLE=1"
-//     // ]
-    provisioner "file" {
-    source = "./webapp.zip"
+  // provisioner "shell" {
+  //   environment_vars = [
+  //     "DEBIAN_FRONTEND=noninteractive",
+  //     "CHECKPOINT_DISABLE=1",
+  //   ]
+  // }
+
+  provisioner "file" {
+    source      = "./webapp.zip"
     destination = "/home/ubuntu/webapp.zip"
   }
 
-  // provisioner "file" {
-  //   source = "./webapp.service"
-  //   destination = "/tmp/webapp.service"
-  // }
-
   provisioner "shell" {
-    script = "./webapp.sh"
-  }
-  }
+    script ="./app.sh"
+ }
 
+}
+
+
+ 

@@ -1,11 +1,12 @@
 const db = require('../models')
-
+const User = db.users;
 // image Upload
 const multer = require('multer')
 const path = require('path')
 const { uuid } = require('uuidv4');
 const bcrypt = require('bcrypt');
 const moment= require('moment');
+const emailValidator = require("email-validator");
 
 // create main Model
 const Product = db.products
@@ -16,107 +17,155 @@ const Product = db.products
 // 1. create product
 
 const addProduct = async (req, res) => {
-
-    const salt=await bcrypt.genSalt()
-    const password=  req.body.password;
-	const hashPassword = await bcrypt.hash(password, salt)
-
-    let postData = {
-        id: uuid(),
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
+    if (
+      !req.body.username ||
+      !req.body.first_name ||
+      !req.body.last_name ||
+      !req.body.password
+    ) {
+      res.status(400).send();
+    } else {
+      // generate salt to hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(req.body.password, salt);
+  
+      let info = {
+        id:uuid(),
         username: req.body.username,
+        last_name: req.body.last_name,
+        first_name: req.body.first_name,
         password: hashPassword,
-        createdAt: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-        updatedAt: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')        
-
+      };
+  
+      if (
+        !emailValidator.validate(`${req.body.username}`) ||
+        !req.body.first_name ||
+        !req.body.last_name
+      ) {
+        res.status(400).send();
+      } else {
+        const findUser = await User.findOne({
+          where: { username: `${req.body.username}` },
+        });
+        if (findUser === null) {
+          const user = await User.create(info).then((data) => {
+            let plainUser = {
+              id: data.id,
+              username: data.username,
+              first_name: data.first_name,
+              last_name: data.last_name,
+              account_created: data.createdAt,
+              account_updated: data.updatedAt,
+            };
+  
+            res.status(201).json(plainUser);
+          });
+  
+          res.status(201).send();
+        } else {
+          res.status(400).send();
+        }
+      }
     }
-
-    function isEmail(email) {
-        var emailFormat = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-        if (email !== '' && email.match(emailFormat)) { return true; }
-        return false;
-    }
-
-    try{
-    if(isEmail(postData.username)){
-    const product = await Product.create(postData)
-        res.status(200).send({id:postData.id,first_name:postData.first_name, last_name: postData.last_name,username: postData.username, account_created:postData.createdAt , account_updated:postData.updatedAt})
-    } 
-    }catch(err){
-        res.status(400).send("Email already exist")
-    }      
-}
+  };
 
 //get single product
 
 const getOneProduct = async (req, res) => {
-
-    if(!req.headers.authorization){
-        res.status(400).send("Enter Auth Value")
+    console.log(db);
+    if (req.headers.authorization === undefined) {
+      res.status(403).send();
+    } else {
+      //grab the encoded value, format: bearer <Token>, need to extract only <token>
+      var encoded = req.headers.authorization.split(" ")[1];
+      // decode it using base64
+      var decoded = new Buffer(encoded, "base64").toString();
+      var username = decoded.split(":")[0];
+      var password = decoded.split(":")[1];
+  
+      // check if the passed username and password match with the values in our database.\
+  
+      const findUser = await User.findOne({
+        where: { username: username },
+      });
+      if (findUser !== null) {
+        if (await bcrypt.compare(password, findUser.password)) {
+          let plainUser = {
+            id: findUser.id,
+            username: findUser.username,
+            first_name: findUser.first_name,
+            last_name: findUser.last_name,
+            account_created: findUser.createdAt,
+            account_updated: findUser.updatedAt,
+          };
+  
+          //res.status(200).send(JSON.stringify(plainUser));
+          res.status(200).json(plainUser);
+        } else {
+          res.status(401).send();
+        }
+      } else {
+        res.status(400).send();
+      }
     }
-    else{
-    var encoded = req.headers.authorization.split(' ')[1];
-	// decode it using base64
-	var decoded = new Buffer(encoded,'base64').toString();
-	var name = decoded.split(':')[0];
-	var pass = decoded.split(':')[1];
-
-    let id = req.params.id
-    let postData = await Product.findOne({ where: { id: id }})
-
-
-    if(name==postData.username && (await bcrypt.compare(pass,postData.password))){
-    res.status(200).send({id:postData.id,first_name:postData.first_name, last_name: postData.last_name,username: postData.username, account_created:postData.createdAt , account_updated:postData.updatedAt})
-    }
-    else{
-        res.status(400).send("No Authorization")  
-   }
-    }
-}
+  };
 
 // 4. update Product
 
-const updateacc = async (req, res,next) => {
-
-    //checking basic-auth
-    if(!req.headers.authorization || req.body.username){
-        res.status(400).send()
-        next();
+const updateacc = async (req, res) => {
+    if (req.body.id || req.body.account_created || req.body.account_updated) {
+      res.status(400).send();
+    } else {
+      if (
+        !req.body.username ||
+        !req.body.first_name ||
+        !req.body.last_name ||
+        !req.body.password
+      ) {
+        res.status(400).send();
+      } else {
+        if (req.headers.authorization === undefined) {
+          res.status(403).send();
+        } else {
+          //grab the encoded value, format: bearer <Token>, need to extract only <token>
+          var encoded = req.headers.authorization.split(" ")[1];
+          // decode it using base64
+          var decoded = new Buffer(encoded, "base64").toString();
+          var username = decoded.split(":")[0];
+          var password = decoded.split(":")[1];
+  
+          const salt = await bcrypt.genSalt(10);
+          const hashPassword = await bcrypt.hash(req.body.password, salt);
+          // check if the passed username and password match with the values in our database.\
+  
+          const findUser = await User.findOne({
+            where: { username: username },
+          });
+          if (findUser !== null) {
+            if (!req.body.first_name || !req.body.last_name || !req.body.password) {
+              res.status(400).send();
+            } else {
+              if (await bcrypt.compare(password, findUser.password)) {
+                if (passValidator.validate(`${req.body.password}`)) {
+                  findUser.update({
+                    first_name: `${req.body.first_name}`,
+                    last_name: `${req.body.last_name}`,
+                    password: hashPassword,
+                  });
+                  res.status(204).send();
+                } else {
+                  res.status(400).send();
+                }
+              }
+              res.status(401).send();
+            }
+          } else {
+            res.status(400).send();
+          }
+        }
+      }
     }
-    else{
-    var encoded = req.headers.authorization.split(' ')[1];
-	// decode it using base64
-	var decoded = new Buffer(encoded,'base64').toString();
-	var name = decoded.split(':')[0];
-	var pass = decoded.split(':')[1];
-
-    const salt=await bcrypt.genSalt()
-    const password=  req.body.password;
-	const hashPassword = await bcrypt.hash(password, salt)
-
-    let postData = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        password: hashPassword,
-        updatedAt: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')  
-    }
-
-    let id = req.params.id
-
-    let getdata = await Product.findOne({ where: { id: id }})
-    console.log(name,getdata.username)
-
-    if(name==getdata.username && (await bcrypt.compare(pass,get.password))){
-    const product = await Product.update( {first_name:postData.first_name, last_name: postData.last_name,password:postData.password,  account_updated:postData.updatedAt} , { where: { id: id }})  
-        res.status(200).send("values updated")
-    }
-    else{
-        res.status(400).send("No Authorization")
-    }
-    }
-    
- }
+  };
 
 
 
@@ -124,5 +173,5 @@ const updateacc = async (req, res,next) => {
 module.exports = {
     addProduct,
     getOneProduct,
-    updateacc,
+    updateacc
 }
