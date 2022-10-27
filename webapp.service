@@ -1,0 +1,13 @@
+[Unit]
+Description=webapp
+
+[Service]
+WorkingDirectory=/home/ubuntu/webapp
+ExecStart=/usr/bin/node /home/ubuntu/webapp/server.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=my-node-server
+User=ankita-dev
+

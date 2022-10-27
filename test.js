@@ -2,7 +2,8 @@ var chai = require('chai');
 chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 var expect = chai.expect;
-let app=require('../server')
+
+jest.useFakeTimers();
 
 describe('Account', () => {
   it("test1", () => {

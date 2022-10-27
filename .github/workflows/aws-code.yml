@@ -41,7 +41,6 @@ jobs:
 
       - name: Run packer commands
         run: |
-          cd packer
           packer init .
           packer fmt .
           packer validate .

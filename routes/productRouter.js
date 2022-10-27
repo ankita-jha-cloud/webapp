@@ -1,5 +1,6 @@
 // import controllers review, products
 const productController = require('../controllers/productController.js')
+const pictureController = require('../controllers/pictureController.js')
 
 
 
@@ -8,13 +9,22 @@ const router = require('express').Router()
 
 
 // use routers
-router.post('/', productController.addProduct)
+router.post('/account', productController.addProduct)
 
 // Products router
-router.get('/:id', productController.getOneProduct)
+router.get('/account/:id', productController.getOneProduct)
 
 
-router.put('/:id', productController.updateacc)
+router.put('/account/:id', productController.updateacc);
+
+
+router.post("/document", pictureController.create_document);
+
+router.get("/documents", pictureController.getdocuments);
+
+router.get("/document/:id", pictureController.get_single_document);
+
+router.delete("/document/:id", pictureController.delete_single_document);
 
 
 
