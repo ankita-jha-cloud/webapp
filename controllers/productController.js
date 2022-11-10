@@ -23,6 +23,7 @@ const addProduct = async (req, res) => {
   logger.info("/account");
   
   sdc.increment("endpoint.add_product");
+  sdc.timing("health.timeout", start);
     if (
       !req.body.username ||
       !req.body.first_name ||
@@ -79,7 +80,8 @@ const addProduct = async (req, res) => {
 
 const getOneProduct = async (req, res) => {
   logger.info("/account/:id");
-  
+  sdc.timing("health.timeout", start);
+
   sdc.increment("endpoint.getOneProduct");
     console.log(db);
     if (req.headers.authorization === undefined) {
@@ -123,7 +125,8 @@ const getOneProduct = async (req, res) => {
 
 const updateacc = async (req, res) => {
   logger.info("/updateAccount");
-  
+  sdc.timing("health.timeout", start);
+
   sdc.increment("endpoint.updateAccount");
     if (req.body.id || req.body.account_created || req.body.account_updated) {
       res.status(400).send();

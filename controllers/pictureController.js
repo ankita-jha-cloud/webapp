@@ -38,6 +38,9 @@ const s3 = new aws.S3({
 const create_document = async (req, res) => {
   logger.info("/create_document");
   
+  sdc.timing("health.timeout", start);
+
+  
   sdc.increment("endpoint.create_document");
   if (req.headers.authorization === undefined) {
     res.status(403).send();
@@ -134,7 +137,8 @@ const create_document = async (req, res) => {
 //Get Picture
 const getdocuments = async (req, res) => {
   logger.info("/get_document");
-  
+  sdc.timing("health.timeout", start);
+
   sdc.increment("endpoint.get_document");
   logger.info("/health running fine");
   
@@ -196,7 +200,8 @@ const getdocuments = async (req, res) => {
   //Get Picture
 const get_single_document = async (req, res) => {
   logger.info("/get_single_document");
-  
+  sdc.timing("health.timeout", start);
+
   sdc.increment("endpoint.get_single_document");
   logger.info("/get_single_document running fine");
   
@@ -272,7 +277,8 @@ const get_single_document = async (req, res) => {
 //Delete Picture
 const delete_single_document = async (req, res) => {
   logger.info("/delete_single_document");
-  
+  sdc.timing("health.timeout", start);
+
   sdc.increment("endpoint.delete_single_document");
   logger.info("/delete_single_document running fine");
   
