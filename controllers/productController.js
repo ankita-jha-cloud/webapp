@@ -7,16 +7,22 @@ const { uuid } = require('uuidv4');
 const bcrypt = require('bcrypt');
 const moment= require('moment');
 const emailValidator = require("email-validator");
+const logger = require('./logger');
 
 // create main Model
 const Product = db.products
-
+const SDC = require("statsd-client");
+const sdc = new SDC({ host: "localhost", port: 8125 });
+var start = new Date();
 
 // main work
 
 // 1. create product
 
 const addProduct = async (req, res) => {
+  logger.info("/account");
+  
+  sdc.increment("endpoint.add_product");
     if (
       !req.body.username ||
       !req.body.first_name ||
@@ -72,6 +78,9 @@ const addProduct = async (req, res) => {
 //get single product
 
 const getOneProduct = async (req, res) => {
+  logger.info("/account/:id");
+  
+  sdc.increment("endpoint.getOneProduct");
     console.log(db);
     if (req.headers.authorization === undefined) {
       res.status(403).send();
@@ -113,6 +122,9 @@ const getOneProduct = async (req, res) => {
 // 4. update Product
 
 const updateacc = async (req, res) => {
+  logger.info("/updateAccount");
+  
+  sdc.increment("endpoint.updateAccount");
     if (req.body.id || req.body.account_created || req.body.account_updated) {
       res.status(400).send();
     } else {
