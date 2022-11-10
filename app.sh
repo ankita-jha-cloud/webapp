@@ -19,19 +19,12 @@ cd ~/ && unzip webapp.zip
 cd ~/webapp && npm i && npm i express
 
 sudo wget https://s3.us-east-1.amazonaws.com/amazoncloudwatch-agent-us-east-1/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
-
 #install it
-
 sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
-
 #download it
-
 sudo wget https://s3.us-east-1.amazonaws.com/amazoncloudwatch-agent-us-east-1/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
-
 #install it
-
 sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
-
 
 # cloud watch agent
 

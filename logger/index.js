@@ -1,19 +1,37 @@
-const {
-    createLogger,
-    transports,
-    format
-} = require('winston');
 
-
-const logger= createLogger({
-    transports:[
-        new transports.File({
-            filename:'info.log',
-            level:'info',
-            format:format.combine(format.timestamp(),format.json())
-        })
-    ]
-})
-module.exports= logger;
-
-
+varappRoot = require("app-root-path");
+varwinston = require("winston");
+// define the custom settings for each transport (file, console)
+varoptions = {​​
+file: {​​
+level:"info",
+filename:`${​​appRoot}​​/info.log`,
+handleExceptions:true,
+json:true,
+maxsize:5242880, // 5MB
+maxFiles:5,
+colorize:false,
+  }​​,
+console: {​​
+level:"debug",
+handleExceptions:true,
+json:false,
+colorize:true,
+  }​​,
+}​​;
+// instantiate a new Winston Logger with the settings defined above
+varlogger = newwinston.createLogger({​​
+transports: [
+newwinston.transports.File(options.file),
+newwinston.transports.Console(options.console),
+  ],
+exitOnError:false, // do not exit on handled exceptions
+}​​);
+// create a stream object with a 'write' function that will be used by `morgan`
+logger.stream = {​​
+write:function (message, encoding) {​​
+// use the 'info' log level so the output will be picked up by both transports (file and console)
+logger.info(message);
+  }​​,
+}​​;
+module.exports = logger;
