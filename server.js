@@ -30,11 +30,6 @@ app.get('/healthz', (req,res) => {
   
   sdc.increment("endpoint.health");
   
-    sdc.timing("health.timeout", start);
-  
-    logger.info("/health running fine");
-  
-    sdc.increment("endpoint.health");
     res.status(200).send();
 })
 
