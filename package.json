@@ -15,6 +15,7 @@
   "author": "harsh",
   "license": "ISC",
   "dependencies": {
+    "app-root-path": "^3.1.0",
     "assert": "^2.0.0",
     "aws-sdk": "^2.1089.0",
     "basic-auth": "^2.0.1",
@@ -36,7 +37,9 @@
     "password-validator": "^5.2.1",
     "pm2": "^5.2.0",
     "sequelize": "^6.25.2",
+    "statsd-client": "^0.4.7",
     "supertest": "^6.2.2",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "winston": "^3.8.2"
   }
 }
