@@ -40,7 +40,7 @@ app.use(express.urlencoded({extended: true}))
 // Router
 app.use('/v1', router);
 
-const PORT = 8080;
+const PORT = 3000;
 app.listen(PORT, () => logger.log('info',`Server listening on ${PORT}`))
 
 module.exports = app;

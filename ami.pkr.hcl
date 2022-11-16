@@ -35,6 +35,7 @@ source "amazon-ebs" "my-ami" {
   ami_description = "AMI for CSYE 6225"
   ami_users = [
     "591866328852",
+    "280939310456"
   ]
   ami_regions = [
     "us-east-1",
@@ -70,7 +71,7 @@ build {
   // }
 
   provisioner "file" {
-    source      = "./webapp.zip"
+    source      = "webapp.zip"
     destination = "/home/ubuntu/webapp.zip"
   }
 
