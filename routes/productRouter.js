@@ -26,6 +26,6 @@ router.get("/document/:id", pictureController.get_single_document);
 
 router.delete("/document/:id", pictureController.delete_single_document);
 
-
+router.get("/verifyUserEmail",productController.verifyUser);
 
 module.exports = router
