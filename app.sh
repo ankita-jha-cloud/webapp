@@ -15,7 +15,7 @@ sudo apt-get install mysql -y
 sudo apt-get install -y nodejs
 sudo apt-get install -y gcc g++ make
 
-cd ~/ && unzip webapp.zip
+cd ~/ && unzip webapp.zip -d webapp
 cd ~/webapp && npm i && npm i express
 
 sudo wget https://s3.us-east-1.amazonaws.com/amazoncloudwatch-agent-us-east-1/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
