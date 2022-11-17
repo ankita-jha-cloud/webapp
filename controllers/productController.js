@@ -223,7 +223,7 @@ const updateacc = async (req, res) => {
               res.status(400).send();
             } else {
               if (await bcrypt.compare(password, findUser.password)) {
-                if (passValidator.validate(`${req.body.password}`)) {
+                if (`${req.body.password}`) {
                   findUser.update({
                     first_name: `${req.body.first_name}`,
                     last_name: `${req.body.last_name}`,
