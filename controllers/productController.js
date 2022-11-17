@@ -235,7 +235,7 @@ const updateacc = async (req, res) => {
   }
   
     // Verify user
-  async function verifyUser(req, res, next) {
+  const verifyUser = async (req, res, next)=> {
     logger.info('verifyUser :');
     logger.info('verifyUser :', req.query.email);
     const user = await getUserByUsername(req.query.email);
