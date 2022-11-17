@@ -11,9 +11,28 @@ const logger = require('../logger');
 
 // create main Model
 const Product = db.products
-
+// statsd
+const SDC = require("statsd-client");
+var start = new Date();
 
 // main work
+
+
+
+const {
+  v4: uuidv4
+} = require('uuid');
+const sdc = new SDC({host: "localhost", port: "8125"});
+
+const AWS = require('aws-sdk');
+AWS.config.update({
+    region: process.env.AWS_REGION || 'us-east-1'
+});
+var sns = new AWS.SNS({});
+var dynamoDatabase = new AWS.DynamoDB({
+    apiVersion: '2012-08-10',
+    region: process.env.AWS_REGION || 'us-east-1'
+});
 
 // 1. create product
 
@@ -199,7 +218,7 @@ const updateacc = async (req, res) => {
           const findUser = await User.findOne({
             where: { username: username },
           });
-          if (findUser !== null) {
+          if (findUser !== null && findUser.isVerified === true)  {
             if (!req.body.first_name || !req.body.last_name || !req.body.password) {
               res.status(400).send();
             } else {
@@ -333,5 +352,6 @@ module.exports = {
     addProduct,
     getOneProduct,
     updateacc,
-    verifyUser
+    verifyUser,
+    getUserByUsername
 }
