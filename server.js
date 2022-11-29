@@ -33,6 +33,16 @@ app.get('/health', (req,res) => {
     res.status(200).send();
 })
 
+app.get('/ankita', (req,res) => {
+    sdc.timing("health.timeout", start);
+
+    logger.info("/health running fine");
+  
+  sdc.increment("endpoint.health");
+  
+    res.status(200).send("Winter is coming!");
+})
+
 //Middlewear
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
