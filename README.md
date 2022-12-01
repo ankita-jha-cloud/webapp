@@ -1,5 +1,5 @@
 CSYE- 6225 
-## Assignment 1
+
 
 - Clone this git repositiory to local system 
 - go to the folder webapp
@@ -13,11 +13,12 @@ npm i chai
 npm i mocha
 npm i mysql
 npm test
-.......
-...
---
-test123
----
 
-testing abcdefghhhhhhh
-llll
+
+### Command to add certificate in AWS Certificate Manager:
+
+## aws acm import-certificate --certificate fileb://Certificate.pem \
+
+## --certificate-chain fileb://CertificateChain.pem \
+
+## --private-key fileb://PrivateKey.pem
