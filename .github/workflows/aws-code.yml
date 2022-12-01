@@ -51,3 +51,26 @@ jobs:
       env: # Grab the AWS environment variables for deployment
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_R }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_R }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+
+
+    - name: AWS CLI
+      id: install-aws-cli
+      uses: unfor19/install-aws-cli-action@v1.0.4
+      with:
+        version: 2
+
+    - run: |
+        aws --version
+        aws ec2 create-launch-template-version --launch-template-name LaunchTemplate --source-version 1 --launch-template-data "ImageId=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)"
+        aws autoscaling update-auto-scaling-group --auto-scaling-group-name myVpc-auto-scaling-group --launch-template LaunchTemplateName='LaunchTemplate',Version='$Latest'          
+        aws autoscaling start-instance-refresh --auto-scaling-group-name myVpc-auto-scaling-group
+
+      shell: bash
