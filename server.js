@@ -23,7 +23,7 @@ db.sequelize.sync()
 ));
 
 // Health Check endpoint - returns 200 HTTP status code
-app.get('/health', (req,res) => {
+app.get('/health1', (req,res) => {
     sdc.timing("health.timeout", start);
 
     logger.info("/health running fine");
