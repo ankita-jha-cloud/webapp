@@ -22,3 +22,7 @@ npm test
 ## --certificate-chain fileb://CertificateChain.pem \
 
 ## --private-key fileb://PrivateKey.pem
+
+
+___
+Testing generating new ami
